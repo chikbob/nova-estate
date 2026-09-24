@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Демонстрационное изображение недвижимости NOVA Estate</title>
+  <desc id="desc">Современный светлый дом среди зелени</desc>
+  <rect width="1200" height="760" fill="#d9e3dc"/>
+  <rect y="510" width="1200" height="250" fill="#8aa194"/>
+  <circle cx="950" cy="145" r="75" fill="#f3dfb8"/>
+  <path d="M170 540V325l250-145 260 145v215z" fill="#f7f2e8"/>
+  <path d="M680 540V285h300v255z" fill="#e8dfd0"/>
+  <path d="M135 335 420 155l295 180" fill="none" stroke="#173f38" stroke-width="30" stroke-linejoin="round"/>
+  <g fill="#28594f"><rect x="245" y="355" width="115" height="185"/><rect x="475" y="355" width="125" height="100"/><rect x="745" y="340" width="165" height="115"/></g>
+  <g fill="#55776b"><circle cx="105" cy="510" r="90"/><circle cx="1060" cy="490" r="115"/></g>
+  <text x="600" y="680" fill="#f7f2e8" font-family="Arial, sans-serif" font-size="42" text-anchor="middle" letter-spacing="8">NOVA ESTATE</text>
+</svg>

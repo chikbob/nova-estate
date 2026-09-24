@@ -1,0 +1,12 @@
+<script setup lang="ts">
+import { Head, router, useForm } from '@inertiajs/vue3';
+import DashboardLayout from '@/Layouts/DashboardLayout.vue';
+type Reference = { id: number; name: string; properties_count: number };
+defineProps<{ types: Reference[]; amenities: Reference[] }>();
+const typeForm = useForm({ name: '' });
+const amenityForm = useForm({ name: '' });
+const addType = () => typeForm.post('/admin/property-types', { onSuccess: () => typeForm.reset() });
+const addAmenity = () => amenityForm.post('/admin/amenities', { onSuccess: () => amenityForm.reset() });
+const remove = (url: string) => confirm('Удалить запись?') && router.delete(url, { preserveScroll: true });
+</script>
+<template><Head title="Справочники"/><DashboardLayout><div class="eyebrow">Администрирование</div><h1 class="mt-2 text-4xl">Справочники</h1><div class="mt-8 grid gap-7 lg:grid-cols-2"><section class="card p-7"><h2 class="text-2xl">Типы недвижимости</h2><form class="mt-5 flex gap-2" @submit.prevent="addType"><label class="flex-1"><span class="sr-only">Название типа</span><input v-model="typeForm.name" class="field" placeholder="Например, апартаменты" required></label><button class="btn btn-primary">Добавить</button></form><p class="mt-1 text-xs text-red-700">{{ typeForm.errors.name }}</p><div class="mt-6 divide-y"><div v-for="type in types" :key="type.id" class="flex items-center justify-between gap-4 py-3"><div><strong>{{ type.name }}</strong><small class="ml-2 text-stone-500">{{ type.properties_count }} объектов</small></div><button class="text-xs font-bold text-red-700" @click="remove(`/admin/property-types/${type.id}`)">Удалить</button></div></div></section><section class="card p-7"><h2 class="text-2xl">Удобства</h2><form class="mt-5 flex gap-2" @submit.prevent="addAmenity"><label class="flex-1"><span class="sr-only">Название удобства</span><input v-model="amenityForm.name" class="field" placeholder="Например, бассейн" required></label><button class="btn btn-primary">Добавить</button></form><p class="mt-1 text-xs text-red-700">{{ amenityForm.errors.name }}</p><div class="mt-6 divide-y"><div v-for="amenity in amenities" :key="amenity.id" class="flex items-center justify-between gap-4 py-3"><div><strong>{{ amenity.name }}</strong><small class="ml-2 text-stone-500">{{ amenity.properties_count }} объектов</small></div><button class="text-xs font-bold text-red-700" @click="remove(`/admin/amenities/${amenity.id}`)">Удалить</button></div></div></section></div></DashboardLayout></template>

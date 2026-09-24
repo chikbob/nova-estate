@@ -1,0 +1,20 @@
+<script setup lang="ts">
+import { Head, router } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import DashboardLayout from '@/Layouts/DashboardLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
+import type { Paginator, User } from '@/types';
+import { useLocale } from '@/composables/useLocale';
+type ManagedUser = User & {is_blocked:boolean; created_at:string};
+const props = defineProps<{users:Paginator<ManagedUser>}>();
+const { t } = useLocale();
+const search = ref('');
+const visibleUsers = computed(() => props.users.data.filter((user) => `${user.name} ${user.email}`.toLowerCase().includes(search.value.toLowerCase())));
+const stats = computed(() => ({ total:props.users.total, clients:props.users.data.filter((u)=>u.role==='client').length, agents:props.users.data.filter((u)=>u.role==='realtor').length, blocked:props.users.data.filter((u)=>u.is_blocked).length }));
+const update = (user:ManagedUser, data:object) => router.patch(`/admin/users/${user.id}`, {role:user.role,is_blocked:user.is_blocked,...data}, {preserveScroll:true});
+</script>
+<template><Head :title="t('admin.users')"/><DashboardLayout>
+    <div class="flex flex-wrap items-end justify-between gap-4"><div><div class="eyebrow">{{t('admin.eyebrow')}}</div><h1 class="mt-2 text-4xl">{{t('admin.users')}}</h1><p class="mt-2 text-sm text-stone-500">{{t('admin.usersText')}}</p></div><label class="relative w-full sm:w-80"><svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input v-model="search" class="field pl-12" :placeholder="t('admin.search')"></label></div>
+    <div class="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><div v-for="(value,key) in stats" :key="key" class="card p-5"><div class="text-xs font-bold uppercase tracking-wider text-stone-400">{{t(`admin.${key}`)}}</div><div class="serif mt-2 text-3xl font-bold text-[#174c43]">{{value}}</div></div></div>
+    <div class="card mt-7 overflow-hidden"><div class="overflow-x-auto"><table class="w-full min-w-[760px] text-left text-sm"><thead class="bg-[#f2eee5]"><tr><th class="p-4">{{t('admin.user')}}</th><th class="p-4">{{t('admin.role')}}</th><th class="p-4">{{t('admin.access')}}</th><th class="p-4"></th></tr></thead><tbody><tr v-for="managedUser in visibleUsers" :key="managedUser.id" class="border-t border-stone-100 transition hover:bg-stone-50"><td class="p-4"><div class="flex items-center gap-3"><div class="grid h-10 w-10 place-items-center rounded-full bg-[#e7cda9] font-bold text-[#173f38]">{{managedUser.name.charAt(0)}}</div><div><div class="font-bold">{{managedUser.name}}</div><div class="text-xs text-stone-500">{{managedUser.email}}</div></div></div></td><td class="p-4"><select class="field w-44 !py-2" :value="managedUser.role" @change="update(managedUser,{role:($event.target as HTMLSelectElement).value})"><option value="client">{{t('common.client')}}</option><option value="realtor">{{t('common.realtor')}}</option><option value="admin">{{t('common.admin')}}</option></select></td><td class="p-4"><span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold" :class="managedUser.is_blocked?'bg-red-50 text-red-700':'bg-emerald-50 text-emerald-700'"><span class="h-1.5 w-1.5 rounded-full" :class="managedUser.is_blocked?'bg-red-500':'bg-emerald-500'"></span>{{managedUser.is_blocked?t('admin.blocked'):t('admin.active')}}</span></td><td class="p-4 text-right"><button class="rounded-lg border px-3 py-2 text-xs font-bold transition" :class="managedUser.is_blocked?'border-emerald-200 text-emerald-700 hover:bg-emerald-50':'border-red-200 text-red-700 hover:bg-red-50'" @click="update(managedUser,{is_blocked:!managedUser.is_blocked})">{{managedUser.is_blocked?t('admin.unblock'):t('admin.block')}}</button></td></tr></tbody></table></div></div><Pagination :links="users.links"/>
+</DashboardLayout></template>
