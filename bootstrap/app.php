@@ -25,24 +25,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias(['role' => EnsureRole::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->report(function (Throwable $exception): ?bool {
-            if (getenv('VERCEL')) {
-                error_log('NOVA exception: '.get_class($exception).' at '.basename($exception->getFile()).':'.$exception->getLine());
-
-                return false;
-            }
-
-            return null;
-        });
-
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
-            if (getenv('VERCEL') && $response->getStatusCode() >= 500) {
-                error_log('NOVA startup error: '.get_class($exception).' at '.basename($exception->getFile()).':'.$exception->getLine());
-            }
-
             if (! app()->bound('view')) {
                 return $response;
             }
