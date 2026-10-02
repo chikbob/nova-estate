@@ -12,6 +12,8 @@
 
 NOVA Estate combines a polished property discovery experience with a role-based workspace for clients, agents and administrators. It is designed to support the complete journey from the first search to a managed viewing request.
 
+[Explore the live site](https://nova-estate-agency.vercel.app) · [Browse properties](https://nova-estate-agency.vercel.app/properties)
+
 </div>
 
 ![NOVA Estate home page](docs/screenshots/home.jpg)
@@ -98,7 +100,8 @@ Authentication and profile screens use the same visual system as the public mark
 | Backend | PHP 8.3+, Laravel 13.32, Eloquent ORM |
 | Frontend | Vue 3, TypeScript, Inertia.js 2.0 |
 | Styling | Tailwind CSS 3, custom NOVA design system |
-| Database | PostgreSQL for application environments, SQLite for lightweight local use and tests |
+| Database | Supabase PostgreSQL in production, SQLite for lightweight local use and tests |
+| Hosting | Vercel PHP functions and static assets |
 | Tooling | Vite 8, vue-tsc, Laravel Pint, PHPUnit |
 
 ## Architecture
@@ -170,9 +173,9 @@ npm run dev
 php artisan serve
 ```
 
-## Demo access
+## Local demo access
 
-All seeded accounts use the password `password`.
+In the local seeded environment, all demo accounts use the password `password`. Production accounts use separately generated credentials; this password does not work on the live site.
 
 | Role | Email |
 | --- | --- |
