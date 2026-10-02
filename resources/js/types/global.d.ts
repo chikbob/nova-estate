@@ -1,7 +1,11 @@
 import { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { AxiosInstance } from 'axios';
-import { route as ziggyRoute } from 'ziggy-js';
 import { PageProps as AppPageProps } from './';
+
+type RouteHelper = {
+    (name: string, params?: unknown, absolute?: boolean): string;
+    (): { current: (name: string) => boolean };
+};
 
 declare global {
     interface Window {
@@ -9,12 +13,12 @@ declare global {
     }
 
     /* eslint-disable no-var */
-    var route: typeof ziggyRoute;
+    var route: RouteHelper;
 }
 
 declare module 'vue' {
     interface ComponentCustomProperties {
-        route: typeof ziggyRoute;
+        route: RouteHelper;
     }
 }
 
