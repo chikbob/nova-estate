@@ -29,6 +29,10 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
+            if (! app()->bound('view')) {
+                return $response;
+            }
+
             if (! app()->environment(['local', 'testing']) && in_array($response->getStatusCode(), [403, 404, 500], true)) {
                 return Inertia::render('ErrorPage', ['status' => $response->getStatusCode()])
                     ->toResponse($request)
