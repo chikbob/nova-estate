@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3'; import { computed } from 'vue'; import AppLayout from '@/Layouts/AppLayout.vue'; import PropertyCard from '@/Components/PropertyCard.vue'; import type { PageProps, Property } from '@/types';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3'; import { computed, ref, watch } from 'vue'; import AppLayout from '@/Layouts/AppLayout.vue'; import PropertyCard from '@/Components/PropertyCard.vue'; import type { PageProps, Property } from '@/types';
 import { useCurrency } from '@/composables/useCurrency'; import { useLocale } from '@/composables/useLocale';
 const props = defineProps<{property: Property; similar: Property[]; isFavorite: boolean}>(); const page = usePage<PageProps>();
 const form = useForm({name: page.props.auth.user?.name || '', phone: page.props.auth.user?.phone || '', email: page.props.auth.user?.email || '', message: ''});
-const { formatPrice } = useCurrency(); const { localized, t } = useLocale();
+const { formatPrice } = useCurrency(); const { localized, locale, t } = useLocale();
 form.message = t('property.viewingMessage');
+const defaultMessage = ref(form.message);
+watch(locale, () => {
+    const nextMessage = t('property.viewingMessage');
+    if (form.message === defaultMessage.value) form.message = nextMessage;
+    defaultMessage.value = nextMessage;
+});
 const title = computed(() => localized(props.property, 'title', props.property.title));
 const description = computed(() => localized(props.property, 'description', props.property.description));
 const address = computed(() => localized(props.property, 'address', props.property.address));
