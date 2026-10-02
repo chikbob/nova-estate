@@ -9,7 +9,7 @@ const props = defineProps<{ property: Property; favorite?: boolean }>();
 const page = usePage<PageProps>();
 const compared = ref(false);
 const { formatPrice } = useCurrency();
-const { localized, t } = useLocale();
+const { localized, locale, t } = useLocale();
 const title = computed(() => localized(props.property, 'title', props.property.title));
 const address = computed(() => localized(props.property, 'address', props.property.address));
 const district = computed(() => localized(props.property, 'district', props.property.district));
@@ -42,7 +42,7 @@ const compareToggle = () => {
             <div class="mt-auto grid gap-3 border-t border-stone-200 pt-4">
                 <div class="flex min-w-0 flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                     <strong class="whitespace-nowrap text-xl text-[#174c43]">{{ formatPrice(property.price) }}<small v-if="property.operation === 'rent'" class="ml-1 text-xs font-normal">/ {{ t('property.month') }}</small></strong>
-                    <span class="whitespace-nowrap text-sm text-stone-500">{{ property.rooms }} {{ t('property.rooms') }} · {{ property.area }} m²</span>
+                    <span class="whitespace-nowrap text-sm text-stone-500">{{ property.rooms }} {{ locale === 'en' && property.rooms === 1 ? 'bed' : t('property.rooms') }} · {{ property.area }} m²</span>
                 </div>
                 <button class="w-fit text-xs font-bold text-[#174c43]" @click="compareToggle">{{ compared ? `✓ ${t('property.compared')}` : `+ ${t('property.compare')}` }}</button>
             </div>
