@@ -29,6 +29,10 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
+            if (getenv('VERCEL') && $response->getStatusCode() >= 500) {
+                error_log('NOVA startup error: '.get_class($exception).' at '.basename($exception->getFile()).':'.$exception->getLine());
+            }
+
             if (! app()->bound('view')) {
                 return $response;
             }
