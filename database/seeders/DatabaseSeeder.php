@@ -9,12 +9,13 @@ use App\Models\PropertyType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $password = Hash::make('password');
+        $password = Hash::make(app()->environment('production') ? (env('NOVA_SEED_PASSWORD') ?: Str::random(40)) : 'password');
         User::factory()->create(['name' => 'Администратор NOVA', 'email' => 'admin@nova.test', 'role' => 'admin', 'password' => $password, 'phone' => '+1 555 100 00 01']);
         $realtors = collect([
             ['Алина Ветрова', 'alina@nova.test', 'Эксперт по жилой недвижимости и семейным переездам.'],

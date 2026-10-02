@@ -48,13 +48,13 @@ const languages: { code: Locale; label: string }[] = [
                 <Link :href="user ? '/dashboard' : '/login'">{{ user ? t('nav.dashboard') : t('nav.login') }}</Link>
             </nav>
         </header>
-        <div v-if="page.props.flash?.success" class="fixed right-4 top-24 z-50 rounded-xl bg-[#174c43] px-5 py-4 text-sm font-bold text-white shadow-xl">{{ page.props.flash.success }}</div>
+        <div v-if="page.props.flash?.success" class="fixed right-4 top-24 z-50 rounded-xl bg-[#174c43] px-5 py-4 text-sm font-bold text-white shadow-xl">{{ t(page.props.flash.success) }}</div>
         <main class="flex-1"><slot /></main>
         <footer class="bg-[#102f2a] py-14 text-stone-200">
             <div class="container-page grid gap-10 md:grid-cols-4">
                 <div class="md:col-span-2"><div class="serif text-2xl font-bold text-white">NOVA Estate</div><p class="mt-4 max-w-md text-sm leading-7 text-stone-300">{{ t('footer.tagline') }}</p></div>
                 <div><div class="mb-4 font-bold text-white">{{ t('footer.navigation') }}</div><div class="grid gap-3 text-sm"><Link href="/properties">{{ t('footer.catalog') }}</Link><Link href="/about">{{ t('footer.company') }}</Link><Link href="/realtors">{{ t('footer.team') }}</Link></div></div>
-                <div><div class="mb-4 font-bold text-white">{{ t('footer.contact') }}</div><p class="text-sm leading-7">+1 555 010 20 30<br>hello@nova-estate.test<br>Nova, Peace Avenue, 18</p></div>
+                <div><div class="mb-4 font-bold text-white">{{ t('footer.contact') }}</div><p class="text-sm leading-7">+1 555 010 20 30<br>hello@nova-estate.test<br>{{ t('contacts.address') }}</p></div>
             </div>
         </footer>
     </div>

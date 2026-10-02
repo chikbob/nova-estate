@@ -28,7 +28,7 @@ const icons = ['⌂', '♡', '◷', '♙'];
         <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <div v-for="(value, label, index) in stats" :key="label" class="group rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
                 <div class="flex items-start justify-between gap-4">
-                    <div><div class="text-sm font-medium text-stone-500">{{ label }}</div><div class="serif mt-2 text-4xl font-bold text-[#174c43]">{{ value }}</div></div>
+                    <div><div class="text-sm font-medium text-stone-500">{{ t(String(label)) }}</div><div class="serif mt-2 text-4xl font-bold text-[#174c43]">{{ value }}</div></div>
                     <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#f2eee5] text-lg text-[#8b6b49]">{{ icons[index % icons.length] }}</span>
                 </div>
             </div>

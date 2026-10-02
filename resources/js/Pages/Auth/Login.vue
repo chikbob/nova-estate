@@ -4,6 +4,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import { useLocale } from '@/composables/useLocale';
 defineProps<{ canResetPassword?: boolean; status?: string }>();
 const { t } = useLocale();
+const showDemoCredentials = import.meta.env.DEV;
 const form = useForm({ email: '', password: '', remember: false });
 const submit = () => form.post(route('login'), { onFinish: () => form.reset('password') });
 </script>
@@ -21,6 +22,6 @@ const submit = () => form.post(route('login'), { onFinish: () => form.reset('pas
             <button class="btn btn-primary w-full !py-3.5" :class="{ 'opacity-50': form.processing }" :disabled="form.processing">{{ t('auth.login') }} <span>→</span></button>
         </form>
         <p class="mt-7 text-center text-sm text-stone-500">{{ t('auth.noAccount') }} <Link href="/register" class="font-bold text-[#174c43]">{{ t('auth.register') }}</Link></p>
-        <div class="mt-8 rounded-xl border border-stone-200 bg-white p-4 text-xs leading-6 text-stone-500"><strong class="text-stone-700">Demo:</strong> client@nova.test / password</div>
+        <div v-if="showDemoCredentials" class="mt-8 rounded-xl border border-stone-200 bg-white p-4 text-xs leading-6 text-stone-500"><strong class="text-stone-700">Demo:</strong> client@nova.test / password</div>
     </GuestLayout>
 </template>
