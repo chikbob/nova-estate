@@ -33,7 +33,7 @@ class PropertyRequest extends FormRequest
             'status' => ['required', Rule::in(['draft', 'moderation', 'published', 'sold', 'rented'])],
             'is_featured' => ['boolean'],
             'amenities' => ['array'], 'amenities.*' => ['exists:amenities,id'],
-            'images' => ['array', 'max:10'], 'images.*' => ['image', 'max:5120'],
+            'images' => ['array', 'max:10'], 'images.*' => ['image', 'mimes:jpeg,png,webp', 'max:5120'],
         ];
     }
 }

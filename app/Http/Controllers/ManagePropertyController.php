@@ -7,6 +7,7 @@ use App\Models\Amenity;
 use App\Models\Property;
 use App\Models\PropertyType;
 use App\Models\User;
+use App\Services\PropertyImageStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -85,13 +86,12 @@ class ManagePropertyController extends Controller
         return back()->with('success', 'Объект удалён.');
     }
 
-    public function destroyImage(Request $request, Property $property, int $image): RedirectResponse
+    public function destroyImage(Request $request, Property $property, int $image, PropertyImageStorage $imageStorage): RedirectResponse
     {
         $this->authorize('update', $property);
         $record = $property->images()->findOrFail($image);
-        if (str_starts_with($record->path, '/storage/')) {
-            \Storage::disk('public')->delete(Str::after($record->path, '/storage/'));
-        } $record->delete();
+        $imageStorage->delete($record->path);
+        $record->delete();
 
         return back()->with('success', 'Фотография удалена.');
     }
@@ -103,9 +103,11 @@ class ManagePropertyController extends Controller
 
     private function storeImages(Request $request, Property $property): void
     {
+        $imageStorage = app(PropertyImageStorage::class);
+        $sortOrder = (int) $property->images()->max('sort_order');
         foreach ($request->file('images', []) as $index => $image) {
-            $path = $image->store('properties/'.$property->id, 'public');
-            $property->images()->create(['path' => '/storage/'.$path, 'alt' => $property->title, 'sort_order' => $property->images()->count() + $index]);
+            $path = $imageStorage->upload($image, $property->id);
+            $property->images()->create(['path' => $path, 'alt' => $property->title, 'sort_order' => $sortOrder + $index + 1]);
         }
     }
 }

@@ -90,6 +90,16 @@ Object.assign(dictionaries.uk, {
     'stats.users': 'Користувачі', 'stats.properties': 'Об’єкти', 'stats.moderation': 'На модерації', 'stats.applications': 'Заявки', 'stats.myProperties': 'Мої об’єкти', 'stats.published': 'Опубліковано', 'stats.newApplications': 'Нові заявки', 'stats.completed': 'Завершено', 'stats.favorites': 'Обране', 'stats.myApplications': 'Мої заявки', 'stats.inProgress': 'У роботі',
 });
 
+Object.assign(dictionaries.en, {
+    'home.years': 'years of expertise', 'home.deals': 'closed deals', 'home.rating': 'client rating', 'home.support': 'support', 'home.experts': 'NOVA Estate experts',
+});
+Object.assign(dictionaries.ru, {
+    'home.years': 'лет опыта', 'home.deals': 'закрытых сделок', 'home.rating': 'оценка клиентов', 'home.support': 'поддержка', 'home.experts': 'Эксперты NOVA Estate',
+});
+Object.assign(dictionaries.uk, {
+    'home.years': 'років досвіду', 'home.deals': 'завершених угод', 'home.rating': 'оцінка клієнтів', 'home.support': 'підтримка', 'home.experts': 'Експерти NOVA Estate',
+});
+
 const initialLocale = typeof window !== 'undefined' && ['en', 'ru', 'uk'].includes(localStorage.getItem('nova_locale') ?? '')
     ? localStorage.getItem('nova_locale') as Locale
     : 'en';

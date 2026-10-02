@@ -8,7 +8,7 @@
 [![Vue.js](https://img.shields.io/badge/Vue.js-3-42B883?style=flat-square&logo=vuedotjs&logoColor=white)](https://vuejs.org)
 [![Inertia.js](https://img.shields.io/badge/Inertia.js-2-9553E9?style=flat-square&logo=inertia&logoColor=white)](https://inertiajs.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Tests](https://img.shields.io/badge/tests-35%20passing-174C43?style=flat-square)](#quality-assurance)
+[![Tests](https://img.shields.io/badge/tests-37%20passing-174C43?style=flat-square)](#quality-assurance)
 
 NOVA Estate combines a polished property discovery experience with a role-based workspace for clients, agents and administrators. It is designed to support the complete journey from the first search to a managed viewing request.
 
@@ -22,7 +22,7 @@ NOVA Estate combines a polished property discovery experience with a role-based 
 
 NOVA Estate gives a real estate business one consistent platform for presenting its portfolio, collecting qualified enquiries and managing day-to-day operations. Visitors can explore verified listings in their preferred language and currency, while internal teams can work with properties, applications, reference data and user access from dedicated dashboards.
 
-The current seed package provides a ready-to-review portfolio of 24 properties, 72 gallery images, agents, clients and application history. All listing images are stored locally, so the interface remains fast and does not depend on third-party image availability at runtime.
+The current seed package provides a ready-to-review portfolio of 24 properties, 72 gallery images, agents, clients and application history. Seeded listing images ship with the application; newly uploaded property photos use Supabase Storage in production.
 
 ## Core capabilities
 
@@ -101,7 +101,7 @@ Authentication and profile screens use the same visual system as the public mark
 | Frontend | Vue 3, TypeScript, Inertia.js 2.0 |
 | Styling | Tailwind CSS 3, custom NOVA design system |
 | Database | Supabase PostgreSQL in production, SQLite for lightweight local use and tests |
-| Hosting | Vercel PHP functions and static assets |
+| Hosting | Vercel PHP functions and static assets; Supabase Storage for uploaded photos |
 | Tooling | Vite 8, vue-tsc, Laravel Pint, PHPUnit |
 
 ## Architecture
@@ -173,6 +173,12 @@ npm run dev
 php artisan serve
 ```
 
+## Production deployment
+
+The live application runs on Vercel at [nova-estate-agency.vercel.app](https://nova-estate-agency.vercel.app). A Vercel PHP function serves Laravel, Vite serves versioned assets, and Supabase PostgreSQL stores listings, users and applications. The function writes Laravel's temporary caches under `/tmp`; persistent property uploads are sent to a public Supabase Storage bucket through a server-only API key.
+
+Set `APP_KEY`, `APP_URL`, the PostgreSQL connection settings, `SUPABASE_URL`, `SUPABASE_STORAGE_BUCKET` and `SUPABASE_STORAGE_KEY` in the hosting environment. Never commit the storage key. Production seed credentials are generated separately and are not the local demo password.
+
 ## Local demo access
 
 In the local seeded environment, all demo accounts use the password `password`. Production accounts use separately generated credentials; this password does not work on the live site.
@@ -200,7 +206,7 @@ npm run build
 vendor/bin/pint --dirty --format agent
 ```
 
-Current status: **35 tests passing with 117 assertions**, successful TypeScript validation and successful production build.
+Current status: **37 tests passing with 122 assertions**, successful TypeScript validation and successful production build.
 
 The feature suite covers authentication, profile management, role restrictions, property publication, localized catalog data, favorites, applications, administration and application filtering.
 
